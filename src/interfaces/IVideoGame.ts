@@ -9,5 +9,5 @@ export default interface IVideoGame {
     publisher: string;
     developer: string;
     release_date: string;
-    profile_url: string;
+    freetogame_profile_url: string;
 }

@@ -1,6 +1,7 @@
 import IVideoGame from "../interfaces/IVideoGame";
 
 export default class VideoGame implements IVideoGame {
+    //Todos los atributos de Videojuego que coinciden con los de la API
     id: number;
     title: string;
     thumbnail: string;
@@ -11,10 +12,24 @@ export default class VideoGame implements IVideoGame {
     publisher: string;
     developer: string;
     release_date: string;
-    profile_url: string;
+    freetogame_profile_url: string;
 
+    /**
+     * Cosntructor que inicializa un objeto VideoGame con todos sus atributos
+     * @param id Id del videojuego
+     * @param title Título del videojuego
+     * @param thumbnail Miniatura del Videojuego
+     * @param short_description Descripción corta del videojuego
+     * @param game_url Url de la página web del videojuego
+     * @param genre Género del videojuego
+     * @param platform Plataforma donde se puede jugar al videojuego
+     * @param publisher Editor del videojuego
+     * @param developer Desarrolador del videojuego
+     * @param release_date Fecha de lanzamiento
+     * @param freetogame_profile_url Url de la página web de donde proviene la api
+     */
 
-    constructor(id: number, title: string, thumbnail: string, short_description: string, game_url: string, genre: string, platform: string, publisher: string, developer: string, release_date: string, profile_url: string) {
+    constructor(id: number, title: string, thumbnail: string, short_description: string, game_url: string, genre: string, platform: string, publisher: string, developer: string, release_date: string, freetogame_profile_url: string) {
         this.id = id;
         this.id = id;
         this.title = title;
@@ -26,7 +41,7 @@ export default class VideoGame implements IVideoGame {
         this.publisher = publisher;
         this.developer = developer;
         this.release_date = release_date;
-        this.profile_url = profile_url;
+        this.freetogame_profile_url = freetogame_profile_url;
     }
 
 
@@ -115,7 +130,7 @@ export default class VideoGame implements IVideoGame {
      * @return {string}
      */
     public get $profile_url(): string {
-        return this.profile_url;
+        return this.freetogame_profile_url;
     }
 
     /**
@@ -203,7 +218,7 @@ export default class VideoGame implements IVideoGame {
      * @param {string} value
      */
     public set $profile_url(value: string) {
-        this.profile_url = value;
+        this.freetogame_profile_url = value;
     }
 
 

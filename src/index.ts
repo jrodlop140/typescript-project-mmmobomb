@@ -1,12 +1,13 @@
 //TODO: Implementación de todo el código TypeScript aquí
 
+
+resaltarOpcionMenu();
+mostrarDivisor();
+
 /**
  * Punto 1: Resaltar opción del menú al hacer clic
 
  */
-
-
-resaltarOpcionMenu();
 
 /**
  * Función que resalta las opciones del menú al clicar en las mismas
@@ -32,4 +33,35 @@ function resaltarOpcionMenu() {
     buscador.addEventListener("click", itemMenuActivo);
     favoritos.addEventListener("click", itemMenuActivo);
 }
+
+/**
+ * Función que muestra el divisor div-data-storage y oculta el divisor div-search al pulsar sobre la pestaña de favoritos, 
+ * enseña el divisor div-search y oculta el divisor div-data-storage al pulsar sobre la ventana de buscador.
+ */
+
+function mostrarDivisor() {
+    //Obtenemos los elementos necesarios
+    let buscador = document.getElementById("a-search") as HTMLAnchorElement;
+    let favoritos = document.getElementById("a-data-storage") as HTMLAnchorElement;
+    let divSearch = document.getElementById("div-search") as HTMLDivElement;
+    let divDataStorage = document.getElementById("div-data-storage") as HTMLDivElement;
+
+    //Añadimos evento de click a favoritos para que aprezca el divisor de Data Storage al clicar sobre el mismo
+    favoritos.addEventListener("click", (ev: Event) => {
+        //Eliminamos d-none para que se muestra el divisor DataStorage
+        divDataStorage.classList.remove("d-none");
+        //Añadimos d-none para que se culte el divisor search
+        divSearch.classList.add("d-none");
+    })
+
+    //Añadimos evento de click al buscador para que aprezca el divisor de Search al clicar sobre el mismo
+    buscador.addEventListener("click", (ev: Event) => {
+        //Eliminamos d-none para que se muestra el divisor Search
+        divSearch.classList.remove("d-none");
+        //Añadimos d-none para que se oculte el divisor Data Storage
+        divDataStorage.classList.add("d-none");
+    })
+}
+
+
 

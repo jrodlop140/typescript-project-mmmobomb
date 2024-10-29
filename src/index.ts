@@ -1,7 +1,7 @@
 //TODO: Implementación de todo el código TypeScript aquí
 
-import IVideoGame from "./interfaces/IVideoGame";
-import VideoGame from "./models/VideoGame";
+import IGato from "./interfaces/IGato";
+import Gato from "./models/Gato";
 
 
 resaltarOpcionMenu();
@@ -65,6 +65,7 @@ function mostrarDivisor() {
         divDataStorage.classList.add("d-none");
     })
 }
+
 
 
 

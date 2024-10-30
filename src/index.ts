@@ -71,6 +71,7 @@ function mostrarDivisor() {
 async function getDataGato(): Promise<Gato[]> {
     try {
         const response = await fetch("https://catfact.ninja/breeds?limit=98");
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -79,13 +80,16 @@ async function getDataGato(): Promise<Gato[]> {
         const datos = await response.json() as { data: IGato[] };
 
         // Mapeamos los datos JSON a instancias de la clase Gato
-        return datos.data.map((gato: IGato) => new Gato(
+        const gatos = datos.data.map((gato: IGato) => new Gato(
             gato.breed,
             gato.country,
             gato.origin,
             gato.coat,
             gato.pattern,
         ));
+        //Guardamos en el session storage
+        sessionStorage.setItem("gatos", JSON.stringify(gatos));
+        return gatos;
     } catch (error) {
         console.error("Error al obtener los datos de la API:", error);
         return []; // Devolvemos un array vacío en caso de error
@@ -142,6 +146,3 @@ function mostrarPrimerElemento() {
         }
     });
 }
-
-
-

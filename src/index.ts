@@ -100,30 +100,42 @@ function mostrarPrimerElemento() {
     const cardTitle = document.getElementById("card-title") as HTMLHeadingElement;
     const liData1 = document.getElementById("li-data1") as HTMLLIElement;
     const liData2 = document.getElementById("li-data2") as HTMLLIElement;
+    const spanErrores = document.getElementById("span-errores") as HTMLSpanElement;
+    const divisorErrores = document.getElementById("mb-3") as HTMLDivElement;
 
     btnBuscar.addEventListener("click", async () => {
         try {
             const gatos = await getDataGato();
             const criterio = searchInput.value.toLowerCase();
+            if (searchInput.value != "") {
+                //Al hacer clic ponemos el texto del span de errores en vació para quitar el mensaje de error al buscar por texto
+                spanErrores.textContent = "";
+                // Filtramos el primer gato que coincida con el criterio de búsqueda
+                const gatoFiltrado = gatos.find(gato =>
+                    gato.country.toLowerCase().includes(criterio)
+                );
 
-            // Filtramos el primer gato que coincida con el criterio de búsqueda
-            const gatoFiltrado = gatos.find(gato =>
-                gato.country.toLowerCase().includes(criterio)
-            );
+                // Comprobamos si encontramos un gato que coincida
+                if (gatoFiltrado) {
+                    // Actualizamos el contenido de la tarjeta
+                    cardTitle.textContent = gatoFiltrado.breed;
+                    liData1.textContent = `País: ${gatoFiltrado.country}`;
+                    liData2.textContent = `Origen: ${gatoFiltrado.origin}`;
 
-            // Comprobamos si encontramos un gato que coincida
-            if (gatoFiltrado) {
-                // Actualizamos el contenido de la tarjeta
-                cardTitle.textContent = gatoFiltrado.breed;
-                liData1.textContent = `País: ${gatoFiltrado.country}`;
-                liData2.textContent = `Origen: ${gatoFiltrado.origin}`;
-
-                // Mostramos la tarjeta
-                card.classList.remove("d-none");
+                    // Mostramos la tarjeta
+                    card.classList.remove("d-none");
+                } else {
+                    alert("No se encontraron gatos que coincidan con el criterio de búsqueda.");
+                    // Ocultamos la tarjeta si no se encuentra un gato
+                    card.classList.add("d-none");
+                }
             } else {
-                alert("No se encontraron gatos que coincidan con el criterio de búsqueda.");
-                // Ocultamos la tarjeta si no se encuentra un gato
-                card.classList.add("d-none");
+                //En el caso de que el input de búsqueda este vacío salta un mensaje de error
+                spanErrores.textContent = "Debes de indicar un texto a buscar";
+                // Cambiamos el estilo del contenido de span-errores a rojo
+                spanErrores.style.color = "red";
+                //Aañadimos al divisor de errores el span para que apareza el mensaje
+                divisorErrores.appendChild(spanErrores);
             }
         } catch (error) {
             console.error("Error al obtener los datos de la API:", error);

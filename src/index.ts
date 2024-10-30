@@ -19,12 +19,14 @@ let buscador = document.getElementById("a-search") as HTMLAnchorElement;
 let favoritos = document.getElementById("a-data-storage") as HTMLAnchorElement;
 let divSearch = document.getElementById("div-search") as HTMLDivElement;
 let divDataStorage = document.getElementById("div-data-storage") as HTMLDivElement;
+let starFav = document.getElementById("star-fav") as HTMLElement;
 
 //Ejecución de funciones 
 resaltarOpcionMenu();
 mostrarDivisor();
 mostrarPrimerElemento();
 eventosPaginacion();
+estadoEstrella();
 
 /**
  * Punto 1: Resaltar opción del menú al hacer clic
@@ -186,3 +188,35 @@ function eventosPaginacion() {
         mostrarElemento(indiceActual, gatos);
     });
 }
+
+/**
+ * Función que controla el estado de la estrella al pasar por encima y al salir con el cursor además de
+ * cuando hacemos clic
+ */
+
+function estadoEstrella() {
+    starFav.addEventListener("mouseover", () => {
+        starFav.classList.remove("bi-star");
+        starFav.classList.add("bi-star-fill");
+    });
+
+    starFav.addEventListener("mouseout", () => {
+        if (!starFav.classList.contains("clicked")) {
+            starFav.classList.remove("bi-star-fill");
+            starFav.classList.add("bi-star");
+        }
+    });
+
+    starFav.addEventListener("click", () => {
+        if (starFav.classList.contains("clicked")) {
+            starFav.classList.remove("clicked");
+            starFav.classList.remove("bi-star-fill");
+            starFav.classList.add("bi-star");
+        } else {
+            starFav.classList.add("clicked");
+            starFav.classList.remove("bi-star");
+            starFav.classList.add("bi-star-fill");
+        }
+    });
+}
+

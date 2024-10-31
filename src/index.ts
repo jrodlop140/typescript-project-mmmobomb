@@ -27,7 +27,7 @@ mostrarDivisor();
 mostrarPrimerElemento();
 eventosPaginacion();
 estadoEstrella();
-mostrarTablaFavoritos();
+
 
 
 /**
@@ -68,6 +68,8 @@ function mostrarDivisor() {
         divDataStorage.classList.remove("d-none");
         //Añadimos d-none para que se culte el divisor search
         divSearch.classList.add("d-none");
+        // Carga y muestra la tabla de favoritos al hacer clic en "Favoritos"
+        mostrarTablaFavoritos();
     })
 
     //Añadimos evento de click al buscador para que aprezca el divisor de Search al clicar sobre el mismo
@@ -76,6 +78,8 @@ function mostrarDivisor() {
         divSearch.classList.remove("d-none");
         //Añadimos d-none para que se oculte el divisor Data Storage
         divDataStorage.classList.add("d-none");
+        //Ocultamos la tarjeta de búsqueda al pulsar sobre Buscador
+        card.classList.add("d-none");
     })
 }
 
@@ -274,6 +278,8 @@ function estadoEstrella() {
         }
 
         guardarFavoritos(favoritos);
+
+        mostrarTablaFavoritos();
     });
 }
 
@@ -297,21 +303,19 @@ function inicializarEstadoEstrella(gato: Gato) {
  * Función para mostrar la tabla con los elementos favoritos almacenados.
  * Carga los favoritos desde localStorage y genera las filas de la tabla.
  */
-
 function mostrarTablaFavoritos() {
-    favoritos.addEventListener("click", () => {
-        //Nos creamos una constante con el tbody de nuestro html y lo vaciamos 
-        const tbody = document.querySelector("tbody") as HTMLTableSectionElement;
-        //Vaciamos el tbody para que no aparezca
-        tbody.innerHTML = "";
-        //Cargamos los elementos favoritos para poder meterlos en la tabla posteriormente
-        const elementosFavoritos = cargarFavoritos();
-        //Nos creamos un elemento tr
-        let row = document.createElement("tr");
-        //Recorremos los elementos favoritos y los metemos en los td de tr
-        elementosFavoritos.forEach((gato, index) => {
-            row = document.createElement("tr");
-            row.innerHTML = `<th scope="row">${index + 1}</th>
+ //Nos creamos una constante con el tbody de nuestro html y lo vaciamos 
+ const tbody = document.querySelector("tbody") as HTMLTableSectionElement;
+ //Vaciamos el tbody para que no aparezca
+ tbody.innerHTML = "";
+ //Cargamos los elementos favoritos para poder meterlos en la tabla posteriormente
+ const elementosFavoritos = cargarFavoritos();
+ //Nos creamos un elemento tr
+ let row = document.createElement("tr");
+ //Recorremos los elementos favoritos y los metemos en los td de tr
+    elementosFavoritos.forEach((gato, index) => {
+        row = document.createElement("tr");
+        row.innerHTML = `<th scope="row">${index + 1}</th>
                   <td>${gato.breed}</td>
                   <td>${gato.country}</td>
                   <td>${gato.origin}</td>
@@ -321,20 +325,40 @@ function mostrarTablaFavoritos() {
 
             // Selección del ícono de la papelera en cada fila
             const trashIcon = row.querySelector(".trash-icon") as HTMLElement;
-
-            // Controlamos el estado de la papelera al poner el ratón encima y al sacarlo
-            trashIcon.addEventListener("mouseover", () => {
-                trashIcon.classList.add("bi-trash-fill");
-                trashIcon.classList.remove("bi-trash");
-            });
-
-            trashIcon.addEventListener("mouseout", () => {
-                trashIcon.classList.add("bi-trash");
-                trashIcon.classList.remove("bi-trash-fill");
-            });
+        // Controlamos el estado de la papelera al poner el ratón encima y al sacarlo
+        trashIcon.addEventListener("mouseover", () => {
+            trashIcon.classList.add("bi-trash-fill");
+            trashIcon.classList.remove("bi-trash");
+        });
+        trashIcon.addEventListener("mouseout", () => {
+            trashIcon.classList.add("bi-trash");
+            trashIcon.classList.remove("bi-trash-fill");
+        });
+        
+        // Evento para eliminar un favorito al hacer clic en la papelera
+        trashIcon.addEventListener("click", () => {
+            eliminarFavoritos(index);
+            mostrarTablaFavoritos(); // Actualiza la tabla después de eliminar
         })
     })
 }
+
+/** 
+ * Función que elimina los gatos de favoritos y guarda una nueva lista con los gatos actualizados 
+ * @param index El índice del gato a eliminar de favoritos
+ */
+function eliminarFavoritos(index: number) {
+    // Llamamos a la función cargarFavoritos() para cargar los gatos
+    let favoritos = cargarFavoritos();
+
+    // Elimina elementos de un array en el índice que se le pase y borra solo 1
+    favoritos.splice(index, 1);
+
+    // Guardamos los favoritos
+    guardarFavoritos(favoritos);
+}
+
+
 
 
 

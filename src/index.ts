@@ -27,6 +27,8 @@ mostrarDivisor();
 mostrarPrimerElemento();
 eventosPaginacion();
 estadoEstrella();
+mostrarTablaFavoritos();
+
 
 /**
  * Punto 1: Resaltar opción del menú al hacer clic
@@ -257,8 +259,8 @@ function estadoEstrella() {
 
         // Verifica si el gato ya es favorito
         if (esFavorito(gatoActual)) {
-            // Elimina el favorito si ya existe mediante una función callback de favoritos que comprueba si se cumplen las condiciones
-            //dadas y en el caso de coincidir filtra y se elimina de la lista
+            // Elimina de favoritos mediante una función callback de favoritos que comprueba si se cumplen las condiciones
+            //dadas y en el caso de coincidir el breed y country del gato actual con el de favoritos filtra y se elimina de la nueva lista
             favoritos = favoritos.filter(
                 fav => !(fav.breed == gatoActual.breed && fav.country == gatoActual.country)
             );
@@ -289,6 +291,35 @@ function inicializarEstadoEstrella(gato: Gato) {
         starFav.classList.remove("clicked", "bi-star-fill");
         starFav.classList.add("bi-star");
     }
+}
+
+/**
+ * Función para mostrar la tabla con los elementos favoritos almacenados.
+ * Carga los favoritos desde localStorage y genera las filas de la tabla.
+ */
+
+function mostrarTablaFavoritos() {
+    favoritos.addEventListener("click", () => {
+        //Nos creamos una constante con el tbody de nuestro html y lo vaciamos 
+        const tbody = document.querySelector("tbody") as HTMLTableSectionElement;
+        //Vaciamos el tbody para que no aparezca
+        tbody.innerHTML = "";
+        //Cargamos los elementos favoritos para poder meterlos en la tabla posteriormente
+        const elementosFavoritos = cargarFavoritos();
+        //Nos creamos un elemento tr
+        let row = document.createElement("tr");
+        //Recorremos los elementos favoritos y los metemos en los td de tr
+        elementosFavoritos.forEach((gato, index) => {
+            row = document.createElement("tr");
+            row.innerHTML = `<th scope="row">${index + 1}</th>
+                  <td>${gato.breed}</td>
+                  <td>${gato.country}</td>
+                  <td>${gato.origin}</td>
+                  <td><i class="bi bi-trash"></i></td>`;
+            //Metemos en el tbody nuestro tr con la información de gatos
+            tbody.appendChild(row);
+        })
+    })
 }
 
 

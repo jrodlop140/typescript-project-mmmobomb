@@ -164,6 +164,9 @@ function mostrarElemento(indice: number, gatos: Gato[]) {
     liData1.textContent = `País: ${gato.country}`;
     liData2.textContent = `Origen: ${gato.origin}`;
     card.classList.remove("d-none");
+
+    // Inicializa la estrella para el gato actual
+    inicializarEstadoEstrella(gato);
 }
 
 /**
@@ -190,8 +193,48 @@ function eventosPaginacion() {
 }
 
 /**
- * Función que controla el estado de la estrella al pasar por encima y al salir con el cursor además de
- * cuando hacemos clic
+ * Función para guardar los favoritos en localStorage
+ * 
+ * @param favoritos 
+ */
+function guardarFavoritos(favoritos: Gato[]) {
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+}
+
+/**
+ * Obtiene y carga los favoritos desde localStorage
+ * 
+ * @returns Gato[] Devuelve un array de objetos de tipo gato o vacio si no hay favoritos
+ */
+
+function cargarFavoritos(): Gato[] {
+    const favoritosJSON = localStorage.getItem("favoritos");
+    if (favoritosJSON) {
+        return JSON.parse(favoritosJSON);
+    } else {
+        return [];
+    }
+}
+
+/**
+ * Función para verificar si un gato está en favoritos
+ * 
+ * @param gato El objeto gato que se desea comprobar
+ * 
+ * @returns comprobarFavorito Devuelve true en caso de que el gato este en favoritos y false en caso de que no lo esté
+ */
+
+
+function esFavorito(gato: Gato): boolean {
+    const favoritos = cargarFavoritos();
+
+    //Comprueba si algún gato cargado desde local storage coincide con el gato dado
+    const comprobarFavorito = favoritos.some(fav => fav.breed == gato.breed && fav.country == gato.country);
+    return comprobarFavorito
+}
+
+/**
+ * Modificación de estadoEstrella para controlar el almacenamiento en favoritos
  */
 
 function estadoEstrella() {
@@ -207,16 +250,46 @@ function estadoEstrella() {
         }
     });
 
-    starFav.addEventListener("click", () => {
-        if (starFav.classList.contains("clicked")) {
-            starFav.classList.remove("clicked");
-            starFav.classList.remove("bi-star-fill");
+    starFav.addEventListener("click", async () => {
+        const gatos = await getDataGato();
+        const gatoActual = gatos[indiceActual];
+        let favoritos = cargarFavoritos();
+
+        // Verifica si el gato ya es favorito
+        if (esFavorito(gatoActual)) {
+            // Elimina el favorito si ya existe mediante una función callback de favoritos que comprueba si se cumplen las condiciones
+            //dadas y en el caso de coincidir filtra y se elimina de la lista
+            favoritos = favoritos.filter(
+                fav => !(fav.breed == gatoActual.breed && fav.country == gatoActual.country)
+            );
+            starFav.classList.remove("clicked", "bi-star-fill");
             starFav.classList.add("bi-star");
         } else {
-            starFav.classList.add("clicked");
+            // Agrega el gato a favoritos
+            favoritos.push(gatoActual);
+            starFav.classList.add("clicked", "bi-star-fill");
             starFav.classList.remove("bi-star");
-            starFav.classList.add("bi-star-fill");
         }
+
+        guardarFavoritos(favoritos);
     });
 }
+
+/**
+ * Función para inicializar el estado de la estrella según si el gato es favorito o no
+ * 
+ * @param gato  Objeto gato que se desea comprobar
+ */
+
+function inicializarEstadoEstrella(gato: Gato) {
+    if (esFavorito(gato)) {
+        starFav.classList.add("clicked", "bi-star-fill");
+        starFav.classList.remove("bi-star");
+    } else {
+        starFav.classList.remove("clicked", "bi-star-fill");
+        starFav.classList.add("bi-star");
+    }
+}
+
+
 

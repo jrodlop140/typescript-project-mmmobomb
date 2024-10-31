@@ -315,12 +315,28 @@ function mostrarTablaFavoritos() {
                   <td>${gato.breed}</td>
                   <td>${gato.country}</td>
                   <td>${gato.origin}</td>
-                  <td><i class="bi bi-trash"></i></td>`;
+                  <td><i class="bi bi-trash trash-icon"></i></td>`; //Metemos trash-icon el cual nos permite devolver el i de trash luego
             //Metemos en el tbody nuestro tr con la información de gatos
             tbody.appendChild(row);
+
+            // Selección del ícono de la papelera en cada fila
+            const trashIcon = row.querySelector(".trash-icon") as HTMLElement;
+
+            // Controlamos el estado de la papelera al poner el ratón encima y al sacarlo
+            trashIcon.addEventListener("mouseover", () => {
+                trashIcon.classList.add("bi-trash-fill");
+                trashIcon.classList.remove("bi-trash");
+            });
+
+            trashIcon.addEventListener("mouseout", () => {
+                trashIcon.classList.add("bi-trash");
+                trashIcon.classList.remove("bi-trash-fill");
+            });
         })
     })
 }
+
+
 
 
 
